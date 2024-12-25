@@ -1,6 +1,6 @@
 # Wellcome to my flask python web project
 
-## f use want test online, use [the url](https://phphongcat.pythonanywhere.com/)
+## if use want test online, use [the url](https://phphongcat.pythonanywhere.com/)
 
 ## THIS IS STEP OF SETUP AND RUN APP IN LOCAL
 ### First, this is how to setup mysql server
