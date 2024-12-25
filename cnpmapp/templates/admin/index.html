@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'admin/master.html' %}
+{% block body %}
+    <h1 class="text-center text-info"> TRANG QUẢN TRỊ KHÁCH SẠN </h1>
+    {% if current_user.is_authenticated %}
+    {% else %}
+        <form method="post" action="/login-admin">
+            <div class="mb-3 mt-3">
+                <label for="username" class="form-label">Username:</label>
+                <input type="text" class="form-control" id="username" required placeholder="Enter username"
+                       name="username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <input type="password" class="form-control" id="password" required placeholder="Enter password"
+                       name="password">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    {% endif %}
+{% endblock %}

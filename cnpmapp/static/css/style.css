@@ -2,10 +2,98 @@
     font-family: Tahoma, serif;
 }
 
+html {
+    height: 100%;
+}
+
 body {
-    background-color: lightgoldenrodyellow;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background-color: lightblue;
 }
 
 .rooms-col {
-    width: 60%; /* Chiều rộng bằng 80% màn hình */
+    width: 60%;
 }
+
+.content {
+    /*background-color: #e3f2fd;*/
+    flex: 1;
+    padding: 20px;
+}
+
+.footer {
+    padding: 20px;
+    background-color: #f3e5f5;
+}
+
+.customer_search{
+    /*width: 75%;*/
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+.date-picker {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin: 0 auto;
+}
+
+.date-picker label {
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.date-picker input[type="date"] {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 180px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.date-picker input[type="date"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+@media (max-width: 600px) {
+    .date-picker {
+        flex-direction: column;
+    }
+
+    .date-picker input[type="date"] {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+}
+
+.input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input[type=number] {
+  -moz-appearance: textfield;
+}
+

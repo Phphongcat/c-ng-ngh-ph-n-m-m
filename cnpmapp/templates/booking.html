@@ -1,10 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "layout/base.html" %}
+{% block title %}Thuê phòng khách sạn{% endblock %}
+{% block content %}
+    <h1 class="text-center text-info"> LẬP PHIẾU THUÊ PHÒNG </h1>
+    <div class="container">
+        <form class="d-flex justify-content-center mt-3 customer_search" method="get" action="/booking">
+            <input type="text" class="form-control w-50 me-2" required style="height: 60px" id="cus_name" name="cus_name"
+                   placeholder="Nhập tên khách hàng">
+            <input type="text" class="form-control w-50 me-2" required style="height: 60px" id="cus_uid" name="cus_uid"
+                   placeholder="Nhập ID khách hàng (CMND, CCCD)">
+            <button type="submit" class="btn btn-primary" style="width: 200px; height: 60px">Tìm kiếm</button>
+        </form>
+    </div>
+    <div class="container my-5" style="padding-top:20px;">
+        {% if tickets is none or tickets|length == 0 %}
+            <h1 class="text-center">Không có phiếu đặt phòng</h1>
+        {% else %}
+            <div class="row justify-content-center">
+                <div class="col rooms-col">
+                    {% for ticket in tickets %}
+                        {% for room in rooms %}
+                            {% if room.id == ticket.room_id %}
+                                <div class="card mb-3">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="{{ room.image }}" class="img-fluid rounded-start"
+                                                 alt="{{ room.image }}">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h1 class="card-title" value="{{ ticket.id }}">
+                                                    Phòng {{ room.name }}</h1>
+                                                {% for customer in ticket.customers %}
+                                                	<p class="card-text">Khách hàng: {{ customer.name }}</p>
+                                                {% endfor %}
+                                                <p class="card-text"><small class="text-muted">
+                                                    <input type="hidden" id="checkin" value="{{ ticket.checkin }}">
+                                                    <input type="hidden" id="checkout" value="{{ ticket.checkout }}">
+                                                    Thời gian: {{ ticket.checkin }} - {{ ticket.checkout }}</small>
+                                                </p>
+                                                <p class="card-text"><small class="text-muted">
+                                                    Chi phí: {{ "{:,.0f}".format(ticket.pricing) }} VNĐ</small>
+                                                </p>
+                                                <a href="javascript:" onclick="booking_confirm({{ ticket.id }}, {{ room.name }})"
+                                                   class="btn btn-primary">Xác nhận thuê</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

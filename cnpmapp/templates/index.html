@@ -1,0 +1,67 @@
+{% extends "layout/base.html" %}
+{% block title %}Đặt phòng khách sạn{% endblock %}
+{% block content %}
+    <body data-page="index">
+    <div class="container">
+        <form action="/" method="GET">
+            <div class="date-picker">
+                <div>
+                    <label for="checkin">Ngày nhận phòng:</label>
+                    <input type="date" id="checkin" name="checkin" class="date-input" value="{{ checkin }}">
+                </div>
+                <div>
+                    <label for="checkout">Ngày trả phòng:</label>
+                    <input type="date" id="checkout" name="checkout" class="date-input" value="{{ checkout }}">
+                </div>
+                <div class="room-type">
+                    <label for="room-type">Chọn loại phòng:</label>
+                    <select id="room-type" name="room_type">
+                        {% for cate in categories %}
+                            <option value="{{ cate.id }}">{{ cate.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container my-5" style="padding-top:20px;">
+        {% if rooms is none or rooms|length == 0 %}
+            <h1 class="text-center">Không có phòng phù hợp</h1>
+        {% else %}
+            <div class="row justify-content-center">
+                <div class="col rooms-col">
+                    {% for r in rooms %}
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="{{ r.image }}" class="img-fluid rounded-start" alt="{{ r.name }}">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h1 class="card-title">Phòng {{ r.name }}</h1>
+                                        <p class="card-text">{{ r.description }}</p>
+                                        <p class="card-text"><small class="text-muted">
+                                            {% for cate in categories %}
+                                                {% if cate.id == r.category_id %}
+                                                    {{ cate.name }}
+                                                {% endif %}
+                                            {% endfor %}</small></p>
+                                        <p class="card-text"><small class="text-muted">Giá mỗi ngày: {{ "{:,.0f}".format(r.cost) }} VNĐ</small>
+                                        </p>
+                                        <a href="javascript:" onclick="nextToReservation({{ r.id }})" class="btn btn-primary">Đặt phòng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        document.getElementById('checkin').value = "{{ checkin }}";
+    </script>
+    </body>
+{% endblock %}

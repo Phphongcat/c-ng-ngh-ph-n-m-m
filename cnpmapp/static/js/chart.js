@@ -1,20 +1,12 @@
-class Chart {
-    constructor(ctx, param2) {
-        
-    }
-
-}
-
-function draw_cate_chart() {
-    const ctx = document.getElementById('cate_stats')
-
+function draw_cate_chart(label, chart_type, labels, datasets, id) {
+    const ctx = document.getElementById(id)
     new Chart(ctx, {
-        type: 'bar',
+        type: chart_type,
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: labels,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: label,
+                data: datasets,
                 borderWidth: 1
             }]
         },
@@ -26,4 +18,17 @@ function draw_cate_chart() {
             }
         }
     });
+}
+
+function years_dynamically(select_year, startYear= 2020) {
+    const yearSelect = document.getElementById('year-select');
+    const currentYear = new Date().getFullYear();
+
+    for (let year = startYear; year <= currentYear; year++) {
+        const option = document.createElement('option');
+        option.value = year.toString();
+        option.textContent = year.toString();
+        yearSelect.appendChild(option);
+    }
+    yearSelect.value=select_year.toString()
 }

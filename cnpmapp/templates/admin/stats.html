@@ -1,10 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'admin/master.html' %}
+{% block body %}
+    <h1 class="text-center align-center">Thống kê báo cáo</h1>
+    <h3 class="text-center text-success">Chọn Tháng và Năm</h3>
+    <form class="d-flex justify-content-center align-items-center" style="padding: 20px; gap: 10px;">
+        <div>
+            <label for="month-select" class="form-select form-select-lg">Tháng</label>
+            <select id="month-select" name="month-select" class="form-select">
+                {% for month in range(1, 13) %}
+                    <option value="{{ month }}">Tháng {{ month }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="year-select" class="form-select form-select-lg">Năm</label>
+            <select id="year-select" name="year-select" class="form-select">
+            </select>
+        </div>
+        <button class="btn btn-success text-center align-items-center" style="width: 100px; margin-bottom: 10px;"
+                type="submit">Lọc
+        </button>
+    </form>
+    <div class="row justify-content-center" style="padding: 20px">
+        <div class="col-md-8 col-sm-12">
+            <h4 class="text-left"> BÁO CÁO DOANH THU THEO THÁNG </h4>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Loại phòng</th>
+                    <th>Doanh thu</th>
+                    <th>Số lượt thuê</th>
+                    <th>Tỷ lệ</th>
+                </tr>
+                {% for p_stat in pricing_stats.stats %}
+                    <tr>
+                        <td>{{ p_stat[0] }}</td>
+                        <td>{{ p_stat[1] }}</td>
+                        <td>{{ "{:,.0f}".format(p_stat[2]) }} VNĐ</td>
+                        <td class="text-center">{{ p_stat[3] }}</td>
+                        <td>{{ "{:.1f}".format(p_stat[4]) }}%</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <a>
+                <label>Tổng doanh thu: {{ "{:,.0f}".format(pricing_stats.total) }} VNĐ</label>
+            </a>
+        </div>
+        <div class="col-md-7 col-sm-12">
+            <canvas id="pricing_stats"></canvas>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="padding: 20px">
+        <div class="col-md-8 col-sm-12">
+            <h4 class="text-left"> BÁO CÁO MẬT ĐỘ SỬ DỤNG PHÒNG </h4>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Tên</th>
+                    <th>Số ngày thuê</th>
+                    <th>Tỷ lệ</th>
+                </tr>
+                {% for d_stat in density_stats.stats %}
+                    <tr>
+                        <td>{{ d_stat[0] }}</td>
+                        <td>Phòng {{ d_stat[1] }}</td>
+                        <td class="text-center">{{ d_stat[2] }}</td>
+                        <td>{{ "{:.1f}".format(d_stat[3]) }}%</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <a>
+                <label>Tổng ngày thuê: {{ density_stats.total }}</label>
+            </a>
+        </div>
+        <div class="col-md-7 col-sm-12">
+            <canvas id="density_stats"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+    <script>
+        let p_labels = []
+        let p_datasets = []
+        {% for p_stat in pricing_stats.stats %}
+            p_labels.push('{{ p_stat[1] }}')
+            p_datasets.push('{{ p_stat[2] }}')
+        {% endfor %}
+        let d_labels = []
+        let d_datasets = []
+        {% for d_stat in density_stats.stats %}
+            d_labels.push('{{ d_stat[1] }}')
+            d_datasets.push('{{ d_stat[2] }}')
+        {% endfor %}
+        window.onload = function () {
+            const month_select = document.getElementById('month-select')
+            month_select.value = '{{ month_kw }}'
+            years_dynamically({{ year_kw }})
+            draw_cate_chart('Doanh thu theo tháng', 'bar', p_labels, p_datasets, 'pricing_stats')
+            draw_cate_chart('Mật độ sử dụng phòng', 'pie', d_labels, d_datasets, 'density_stats')
+        }
+    </script>
+{% endblock %}

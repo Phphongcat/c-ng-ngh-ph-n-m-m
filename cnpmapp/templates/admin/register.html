@@ -1,21 +1,24 @@
-{#{% extends 'admin/master.html' %}#}
-{% extends "layout/base.html" %}
-{% block content %}
+{% extends 'admin/master.html' %}
+{% block body %}
     {% if m_error %}
         <div class="alert alert-danger">
             {{ m_error }}
         </div>
+    {% elif m_success %}
+        <div class="alert alert-success">
+            {{ m_success }}
+        </div>
     {% endif %}
     <form method="post" enctype="multipart/form-data" action="/register">
         <div class="form-floating mb-3 mt-3">
+            <label for="fullname" class="form-label">Tên người dùng:</label>
             <input type="text" class="form-control" id="fullname" required placeholder="Nhập tên người dùng"
                    name="fullname">
-            <label for="fullname" class="form-label">Tên người dùng:</label>
         </div>
         <div class="form-floating mb-3 mt-3">
+            <label for="username" class="form-label">Tên đăng nhập:</label>
             <input type="text" class="form-control" id="username" required placeholder="Nhập tên đăng nhập"
                    name="username">
-            <label for="username" class="form-label">Tên đăng nhập:</label>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Mật khẩu:</label>

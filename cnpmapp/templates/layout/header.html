@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">Trang đặt phòng khách sạn</a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Trang chủ<span class="sr-only"></span></a>
+            </li>
+            {% if current_user.is_authenticated %}
+                <li class="nav-item active">
+                    <a class="nav-link text-success" href="/booking">Lập phiếu thuê<span class="sr-only"></span></a>
+                </li>
+                <li>
+                    <a class="nav-link text-success" style="padding-right: 20px" href="/payment">Thanh toán<span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item disabled">
+                    <img class="rounded-circle" src="{{ current_user.avatar }}" width="40px"
+                         alt="{{ current_user.name }}">
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link text-danger" href="/logout">Đăng xuất<span class="sr-only"></span></a>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+                    <a class="nav-link text-success" href="/login">Đăng nhập<span class="sr-only"></span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
