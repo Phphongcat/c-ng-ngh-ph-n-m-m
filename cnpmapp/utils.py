@@ -155,7 +155,8 @@ def booking_ticket(ticket_id):
         return False
 
     for t in room.tickets:
-        if t.active and t.role is TicketRole.BOOKING:
+        if t.active and t.role is TicketRole.BOOKING and\
+                t.checkin <= ticket.checkin and t.checkout >= ticket.checkout:
             return False
 
     ticket.role = TicketRole.BOOKING
@@ -302,7 +303,7 @@ def generate_invoice(payment_id):
 def scheduled_task():
     with app.app_context():
         expired_date = datetime.now()
-        tickets = Ticket.query.filter(Ticket.role==TicketRole.RESERVED).all()
+        tickets = Ticket.query.filter(Ticket.active, Ticket.role==TicketRole.RESERVED).all()
         for ticket in tickets:
             if ticket.active and ticket.checkout < expired_date:
                 ticket.active = False

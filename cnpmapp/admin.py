@@ -65,9 +65,9 @@ class RoomView(AuthenticateModelView):
         'active': 'Trạng thái'
     }
     extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
-    form_overrides = {
-        'description': CKTextAreaField
-    }
+    # form_overrides = {
+    #     'description': CKTextAreaField
+    # }
 
 
 class StatsView(AuthenticateBaseView):
