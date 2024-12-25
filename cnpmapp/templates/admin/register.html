@@ -1,0 +1,38 @@
+{#{% extends 'admin/master.html' %}#}
+{% extends "layout/base.html" %}
+{% block content %}
+    {% if m_error %}
+        <div class="alert alert-danger">
+            {{ m_error }}
+        </div>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data" action="/register">
+        <div class="form-floating mb-3 mt-3">
+            <input type="text" class="form-control" id="fullname" required placeholder="Nhập tên người dùng"
+                   name="fullname">
+            <label for="fullname" class="form-label">Tên người dùng:</label>
+        </div>
+        <div class="form-floating mb-3 mt-3">
+            <input type="text" class="form-control" id="username" required placeholder="Nhập tên đăng nhập"
+                   name="username">
+            <label for="username" class="form-label">Tên đăng nhập:</label>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mật khẩu:</label>
+            <input type="password" class="form-control" id="password" required placeholder="Nhập mật khẩu"
+                   name="password">
+        </div>
+        <div class="mb-3">
+            <label for="confirm" class="form-label">Xác nhận Mật khẩu:</label>
+            <input type="password" class="form-control" id="confirm" required placeholder="Nhập lại mật khẩu"
+                   name="confirm">
+        </div>
+        <div>
+            <label for="avatar" class="form-label">Ảnh đại diện:</label>
+            <input type="file" class="form-control" id="avatar" required name="avatar">
+        </div>
+        <div class="align-content-center align-center" style="padding-top: 20px">
+            <input type="submit" value="Đăng ký" class="btn btn-primary">
+        </div>
+    </form>
+{% endblock %}

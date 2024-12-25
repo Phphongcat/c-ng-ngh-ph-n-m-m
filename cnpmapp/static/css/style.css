@@ -1,0 +1,11 @@
+* {
+    font-family: Tahoma, serif;
+}
+
+body {
+    background-color: lightgoldenrodyellow;
+}
+
+.rooms-col {
+    width: 60%; /* Chiều rộng bằng 80% màn hình */
+}
