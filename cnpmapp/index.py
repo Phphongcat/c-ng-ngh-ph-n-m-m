@@ -38,7 +38,7 @@ def booking():
     rooms = utils.load_rooms()
 
     if name and uid:
-        return render_template('booking.html', rooms=rooms, tickets=utils.get_tickets_by_customer(name, uid, role))
+        return render_template('booking.html', rooms=rooms, tickets=utils.get_tickets_by_customer(name, uid, role, False))
     return render_template('booking.html', rooms=rooms, tickets=utils.get_active_tickets(role))
 
 

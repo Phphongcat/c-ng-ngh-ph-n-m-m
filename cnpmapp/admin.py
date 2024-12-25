@@ -35,7 +35,6 @@ class AuthenticateModelView(ModelView):
 
 class PricingView(AuthenticateModelView):
     column_list = ['name', 'cost_cap', 'surcharge', 'abroad_coefficient', 'domestic_coefficient', 'rooms']
-    column_exclude_list = ['image']
     column_labels = {
         'name': 'Tên',
         'cost_cap': 'Số người miễn phụ thu',
@@ -47,7 +46,12 @@ class PricingView(AuthenticateModelView):
 
 
 class CategoryView(AuthenticateModelView):
-    pass
+    column_list = ['name', 'capacity', 'rooms']
+    column_labels = {
+        'name': 'Tên',
+        'capacity': 'sức chứa',
+        'rooms': 'Phòng phụ thuộc'
+    }
 
 
 class RoomView(AuthenticateModelView):

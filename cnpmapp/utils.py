@@ -41,13 +41,14 @@ def load_rooms(cate_id=None, checkin=None, checkout=None):
 
 
 def get_active_tickets(role):
-    return Ticket.query.filter_by(active=True, role=role).all()
+    return Ticket.query.filter_by(active=True, role=role, payment=None).all()
 
 
-def get_tickets_by_customer(name, uid, role):
+def get_tickets_by_customer(name, uid, role, check_active=True):
     customer = Customer.query.filter_by(name=name, uid=uid).first()
     if customer and customer.tickets:
-        return list(filter(lambda ticket: ticket.active and ticket.role==role, customer.tickets))
+        return list(filter(lambda ticket: ticket.active and ticket.role==role, customer.tickets))\
+            if check_active else list(filter(lambda ticket: ticket.role==role, customer.tickets))
     return None
 
 
@@ -300,13 +301,10 @@ def generate_invoice(payment_id):
 @scheduler.task('interval', id='delete_old_items_job', minutes=1)
 def scheduled_task():
     with app.app_context():
-        expired_date = datetime.now().replace(hour=23, minute=59, second=0, microsecond=0)
-        released_date = expired_date - timedelta(days=28)
+        expired_date = datetime.now()
         tickets = Ticket.query.filter(Ticket.role==TicketRole.RESERVED).all()
         for ticket in tickets:
-            if ticket.checkout <= released_date:
-                db.session.delete(ticket)
-            elif ticket.active and ticket.checkout < expired_date:
+            if ticket.active and ticket.checkout < expired_date:
                 ticket.active = False
         db.session.commit()
 

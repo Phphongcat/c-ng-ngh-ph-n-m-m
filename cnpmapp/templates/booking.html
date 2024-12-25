@@ -41,8 +41,12 @@
                                                 <p class="card-text"><small class="text-muted">
                                                     Chi phí: {{ "{:,.0f}".format(ticket.pricing) }} VNĐ</small>
                                                 </p>
-                                                <a href="javascript:" onclick="booking_confirm({{ ticket.id }}, {{ room.name }})"
-                                                   class="btn btn-primary">Xác nhận thuê</a>
+                                                {% if ticket.active %}
+                                                    <a href="javascript:" onclick="booking_confirm({{ ticket.id }}, {{ room.name }})"
+                                                       class="btn btn-primary">Xác nhận thuê</a>
+                                                {% else %}
+                                                    <b>Phiếu đặt phòng đã quá hạn</b>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
