@@ -111,7 +111,6 @@ def reservation_confirm():
     room = utils.load_room(int(request.form['room_id']))
     checkin = request.form['checkin']
     checkout = request.form['checkout']
-    phonenumbers = request.form['phone_1']
     keyword = 'confirm_reservation'
     session[keyword] = {
         'status': None,
@@ -128,7 +127,10 @@ def reservation_confirm():
         session[keyword]['status'] = 'success' if status else 'error'
         session[keyword]['message'] = 'Đặt phòng thành công' if status else 'Đặt phòng không thành công, hãy thử lại'
         if status:
-            mess = utils.get_sms(room.name, phonenumbers, checkin, checkout)
+            phones = []
+            for num in range (1, int(request.form['num_people']) + 1):
+                phones.append(request.form[f'phone_{num}'])
+            mess = utils.get_sms(room.name, phones, checkin, checkout)
             sms.send(mess['phone'], mess['message'])
     finally:
         return redirect(f'/reservation/{room.id}&{checkin}&{checkout}')

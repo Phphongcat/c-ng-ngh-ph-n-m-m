@@ -136,13 +136,16 @@ def check_ticket(rid, checkin, checkout):
     return existing_ticket is not None
 
 
-def get_sms(room_name, phone_number, checkin, checkout):
-    parsed_number = phonenumbers.parse(phone_number, 'VN')
-    international_number = phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
-    international_number_no_plus = international_number.replace("+", "")
-    return {
-        'phone': international_number_no_plus,
+def get_sms(room_name, phone_numbers, checkin, checkout):
+    data = {
+        'phone': [],
         'message': f"Quý khách đã đặt thành công phòng {room_name}, thời gian từ sáng {checkin} đến tối {checkout}."}
+    for phone_number in phone_numbers:
+        parsed_number = phonenumbers.parse(phone_number, 'VN')
+        international_number = phonenumbers.format_number(parsed_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+        international_number_no_plus = international_number.replace("+", "")
+        data['phone'].append({'to' : f'{international_number_no_plus}'})
+    return data
 
 
 def booking_ticket(ticket_id):

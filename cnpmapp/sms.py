@@ -2,12 +2,12 @@ import http.client
 import json
 
 
-def send(phone="84868656710", text="Đây là sms đặt phòng"):
+def send(phones, text):
     conn = http.client.HTTPSConnection("e5gn5r.api.infobip.com")
     payload = json.dumps({
         "messages": [
             {
-                "destinations": [{"to":phone}],
+                "destinations": phones,
                 "from": "ServiceSMS",
                 "text": text
             }
