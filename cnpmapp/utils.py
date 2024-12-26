@@ -1,16 +1,15 @@
-import hashlib, phonenumbers
+import hashlib
 import os.path
 import tempfile
-from io import BytesIO
-
-from fpdf import FPDF
-from datetime import datetime, timedelta
 from calendar import monthrange
+from datetime import datetime
 
-from reportlab.pdfgen import canvas
-from sqlalchemy import and_, func, DateTime
+import phonenumbers
+from fpdf import FPDF
+from sqlalchemy import and_
+
 from cnpmapp import db, scheduler, app
-from cnpmapp.models import Room, Ticket, Category, TicketRole, Pricing, Customer, Account, Payment
+from cnpmapp.models import Room, Ticket, Category, TicketRole, Pricing, Customer, Account, Payment, Order
 
 
 def load_pricing(pri_id):
@@ -36,7 +35,7 @@ def load_rooms(cate_id=None, checkin=None, checkout=None):
     if checkin and checkout:
         s_day = datetime.strptime(checkin, "%Y-%m-%d").replace(hour=6, minute=0, second=0, microsecond=0)
         e_day = datetime.strptime(checkout, "%Y-%m-%d").replace(hour=18, minute=0, second=0, microsecond=0)
-        query = query.filter(~Room.tickets.any(and_(Ticket.checkin <= s_day, Ticket.checkout >= e_day)))
+        return list(filter(lambda room: all(s_day > ticket.checkout or e_day < ticket.checkin for ticket in room.tickets), query.all()))
     return query.all()
 
 
@@ -306,10 +305,11 @@ def generate_invoice(payment_id):
 def scheduled_task():
     with app.app_context():
         expired_date = datetime.now()
-        tickets = Ticket.query.filter(Ticket.active, Ticket.role==TicketRole.RESERVED).all()
+        tickets = Ticket.query.filter(Ticket.role==TicketRole.RESERVED).all()
         for ticket in tickets:
-            if ticket.active and ticket.checkout < expired_date:
-                ticket.active = False
+            if ticket.checkout < expired_date:
+                db.session.query(Order).filter(Order.ticket_id == ticket.id).delete()
+                db.session.delete(ticket)
         db.session.commit()
 
 
